@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rock Paper Scissors Game</title>
+  <style>
+    :root{
+      --accent:#ff7a59;
+      --bg:#0f172a;
+      --card:rgba(255,255,255,0.04);
+      --muted:#6b7280;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    body{margin:0;background-color:var(--bg);color:#e6eef8;line-height:1.6;transition: background 0.4s, color 0.4s}
+    #rps-game{margin:60px auto;max-width:600px;padding:30px;background:var(--card);border-radius:16px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    #rps-timers{display:flex;justify-content:space-between;margin-bottom:20px;gap:60px}
+    #rps-timers div{font-size:2rem;color:var(--accent)}
+    #palette1, #palette2{display:flex;gap:10px}
+    .rps-btn{padding:10px;font-size:1.5rem;background:transparent;border:none;cursor:pointer;transition:0.3s}
+    .rps-btn:hover{transform:scale(1.1)}
+    .btn{padding:12px 24px;background:var(--accent);color:#081428;font-weight:700;border-radius:8px;border:none;cursor:pointer;transition:0.3s}
+    .btn:hover{opacity:0.85}
+    .center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      min-height: 80vh;
+    }
+    .theme-switch-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 30px auto 10px auto;
+      max-width: 600px;
+    }
+    .theme-label {
+      font-weight: 600;
+      color: var(--muted);
+      margin-right: 8px;
+    }
+    .theme-switch {
+      width: 44px;
+      height: 24px;
+      appearance: none;
+      background: #334155;
+      border-radius: 12px;
+      position: relative;
+      outline: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .theme-switch:checked {
+      background: #ff7a59;
+    }
+    .theme-switch + .slider {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 44px;
+      height: 24px;
+      pointer-events: none;
+    }
+    .theme-switch:before {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 4px;
+      width: 16px;
+      height: 16px;
+      background: #fff;
+      border-radius: 50%;
+      transition: left 0.3s;
+    }
+    .theme-switch:checked:before {
+      left: 24px;
+      background: #334155;
+    }
+    body.light {
+      background: #f8fafc;
+      color: #222;
+    }
+    body.light #rps-game {
+      background: #fff;
+      color: #222;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    }
+    body.light h3 {
+      color: #ff7a59;
+    }
+    body.light .btn {
+      background: #ff7a59;
+      color: #fff;
+    }
+    body.light #rps-result {
+      color: #22d3ee;
+    }
+    body {
+      transition: background 0.4s, color 0.4s;
+    }
+    .theme-switch-wrap.global-switch {
+      position: fixed;
+      top: 18px;
+      right: 32px;
+      width: auto;
+      height: 56px;
+      background: transparent;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin: 0;
+      padding: 0;
+      box-shadow: none;
+      max-width: none;
+    }
+    #rps-game.center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      margin: 0;
+      min-height: unset;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+    .rps-btn[data-choice="rock"] {
+      filter: none;
+    }
+    .rps-btn[data-choice="paper"] {
+      filter: none;
+    }
+    .rps-btn[data-choice="scissors"] {
+      filter: none;
+    }
+    body.light .rps-btn {
+      filter: brightness(0.7) contrast(1.2) drop-shadow(0 2px 4px #ff7a59);
+    }
+  </style>
+</head>
+<body class="dark">
+    <div class="theme-switch-wrap global-switch">
+      <label class="theme-label">Light Mode</label>
+      <input type="checkbox" id="theme-switch" class="theme-switch">
+      <span class="slider"></span>
+    </div>
+    <section id="rps-game" class="center">
+    <h3>Rock Paper Scissors Game</h3>
+    <p style="color:var(--muted);max-width:500px;margin:0 auto 20px;">Challenge a friend! Each player has 5 seconds to choose rock, paper, or scissors. If time runs out, no choice is made. The winner is shown after both players pick or the countdown ends. Click "Restart Game" to play again.</p>
+    <button id="rps-start" class="btn" style="margin-bottom:24px;">Start Game</button>
+    <div id="rps-timers">
+      <div>
+        <strong>Player 1</strong>
+        <div id="timer1" style="font-size:2rem;color:var(--accent);">5</div>
+      </div>
+      <div>
+        <strong>Player 2</strong>
+        <div id="timer2" style="font-size:2rem;color:var(--accent);">5</div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;gap:40px;">
+      <div>
+        <div style="margin-bottom:10px;font-weight:bold;">Player 1</div>
+        <div id="palette1">
+          <button class="rps-btn" data-player="1" data-choice="rock">🪨</button>
+          <button class="rps-btn" data-player="1" data-choice="paper">📄</button>
+          <button class="rps-btn" data-player="1" data-choice="scissors">✂️</button>
+        </div>
+        <div id="choice1" style="margin-top:10px;font-size:1.2rem;color:var(--accent);"></div>
+      </div>
+      <div>
+        <div style="margin-bottom:10px;font-weight:bold;">Player 2</div>
+        <div id="palette2">
+          <button class="rps-btn" data-player="2" data-choice="rock">🪨</button>
+          <button class="rps-btn" data-player="2" data-choice="paper">📄</button>
+          <button class="rps-btn" data-player="2" data-choice="scissors">✂️</button>
+        </div>
+        <div id="choice2" style="margin-top:10px;font-size:1.2rem;color:var(--accent);"></div>
+      </div>
+    </div>
+    <div id="rps-result" style="margin-top:30px;font-size:1.5rem;font-weight:bold;"></div>
+    <button id="rps-restart" class="btn" style="margin-top:20px;display:none;">Restart Game</button>
+  </section>
+  <script>
+    let timer1 = 5, timer2 = 5;
+    let interval1, interval2;
+    let choice1 = null, choice2 = null;
+    const timer1El = document.getElementById('timer1');
+    const timer2El = document.getElementById('timer2');
+    const palette1 = document.getElementById('palette1');
+    const palette2 = document.getElementById('palette2');
+    const choice1El = document.getElementById('choice1');
+    const choice2El = document.getElementById('choice2');
+    const resultEl = document.getElementById('rps-result');
+    const restartBtn = document.getElementById('rps-restart');
+    const startBtn = document.getElementById('rps-start');
+
+    function setGameEnabled(enabled) {
+      palette1.querySelectorAll('button').forEach(btn => btn.disabled = !enabled);
+      palette2.querySelectorAll('button').forEach(btn => btn.disabled = !enabled);
+    }
+
+    function startCountdown() {
+      timer1 = 5; timer2 = 5;
+      timer1El.textContent = timer1;
+      timer2El.textContent = timer2;
+      setGameEnabled(true);
+      interval1 = setInterval(() => {
+        timer1--;
+        timer1El.textContent = timer1;
+        if (timer1 === 0) {
+          clearInterval(interval1);
+          palette1.querySelectorAll('button').forEach(btn => btn.disabled = true);
+          if (!choice1) choice1 = 'none';
+          choice1El.textContent = choice1 === 'none' ? 'No choice' : choice1;
+          checkResult();
+        }
+      }, 1000);
+      interval2 = setInterval(() => {
+        timer2--;
+        timer2El.textContent = timer2;
+        if (timer2 === 0) {
+          clearInterval(interval2);
+          palette2.querySelectorAll('button').forEach(btn => btn.disabled = true);
+          if (!choice2) choice2 = 'none';
+          choice2El.textContent = choice2 === 'none' ? 'No choice' : choice2;
+          checkResult();
+        }
+      }, 1000);
+    }
+
+    function checkResult() {
+      if ((choice1 && choice2) || (timer1 === 0 && timer2 === 0)) {
+        let winner = '';
+        if (choice1 === 'none' || choice2 === 'none') {
+          winner = 'No winner! Both players must choose.';
+        } else if (choice1 === choice2) {
+          winner = "It's a tie!";
+        } else if (
+          (choice1 === 'rock' && choice2 === 'scissors') ||
+          (choice1 === 'paper' && choice2 === 'rock') ||
+          (choice1 === 'scissors' && choice2 === 'paper')
+        ) {
+          winner = 'Player 1 wins!';
+        } else {
+          winner = 'Player 2 wins!';
+        }
+        resultEl.textContent = winner;
+        restartBtn.style.display = 'inline-block';
+      }
+    }
+
+    palette1.addEventListener('click', e => {
+      if (e.target.classList.contains('rps-btn') && !choice1 && timer1 > 0) {
+        choice1 = e.target.dataset.choice;
+        choice1El.textContent = choice1;
+        palette1.querySelectorAll('button').forEach(btn => btn.disabled = true);
+        clearInterval(interval1);
+        checkResult();
+      }
+    });
+    palette2.addEventListener('click', e => {
+      if (e.target.classList.contains('rps-btn') && !choice2 && timer2 > 0) {
+        choice2 = e.target.dataset.choice;
+        choice2El.textContent = choice2;
+        palette2.querySelectorAll('button').forEach(btn => btn.disabled = true);
+        clearInterval(interval2);
+        checkResult();
+      }
+    });
+    restartBtn.addEventListener('click', () => {
+      choice1 = null; choice2 = null;
+      choice1El.textContent = '';
+      choice2El.textContent = '';
+      resultEl.textContent = '';
+      setGameEnabled(false);
+      restartBtn.style.display = 'none';
+      timer1El.textContent = '5';
+      timer2El.textContent = '5';
+      startBtn.style.display = 'inline-block';
+    });
+    startBtn.addEventListener('click', () => {
+      choice1 = null; choice2 = null;
+      choice1El.textContent = '';
+      choice2El.textContent = '';
+      resultEl.textContent = '';
+      restartBtn.style.display = 'none';
+      startBtn.style.display = 'none';
+      startCountdown();
+    });
+    setGameEnabled(false);
+    startBtn.style.display = 'inline-block';
+    const themeSwitch = document.getElementById('theme-switch');
+    themeSwitch.addEventListener('change', function() {
+      document.body.classList.toggle('light');
+      document.body.classList.toggle('dark');
+    });
+    document.body.classList.add('dark');
+  </script>
+</body>
+</html>

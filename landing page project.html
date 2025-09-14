@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mohammed Dino Portfolio</title>
+  <style>
+    :root{
+      --accent:#ff7a59;
+      --bg:#0f172a;
+      --card:rgba(255,255,255,0.04);
+      --glass:rgba(255,255,255,0.06);
+      --muted:#6b7280;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background-color:var(--bg);color:#e6eef8;line-height:1.6}
+    a{color:inherit;text-decoration:none}
+
+    header{display:flex;justify-content:space-between;align-items:center;padding:20px 40px;background-color:rgba(0,0,0,0.3);position:sticky;top:0;z-index:10}
+    header h1{font-size:1.5rem}
+    nav a{margin-left:20px;color:#e6eef8;font-weight:500;transition:0.2s}
+    nav a:hover{color:var(--accent)}
+
+    .hero{min-height:70vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 20px;background:linear-gradient(180deg, rgba(6,10,32,0.9) 0%, rgba(3,7,28,0.95) 100%)}
+    .hero h2{font-size:2.5rem;margin-bottom:10px}
+    .hero p{color:var(--muted);margin-bottom:20px}
+    .btn{padding:12px 24px;background:var(--accent);color:#081428;font-weight:700;border-radius:8px;border:none;cursor:pointer;transition:0.3s}
+    .btn:hover{opacity:0.85}
+
+    section{max-width:1100px;margin:60px auto;padding:0 20px}
+    h3{margin-bottom:20px}
+
+    .about, .skills, .projects{display:grid;gap:20px}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+.skill{background:var(--card);padding:10px;border-radius:8px;text-align:center}
+
+    .projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+    .project-card{background:var(--card);padding:18px;border-radius:12px;transition:0.3s}
+    .project-card:hover{transform:translateY(-5px)}
+    .project-card h4{margin-bottom:8px}
+    .project-card p{color:var(--muted);font-size:0.9rem}
+
+    footer{text-align:center;padding:20px;color:var(--muted);border-top:1px solid rgba(255,255,255,0.1);margin-top:60px}
+
+    @media(max-width:700px){.hero h2{font-size:2rem}}
+
+    body {
+      transition: background 0.4s, color 0.4s;
+    }
+    .theme-switch-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 30px auto 10px auto;
+      max-width: 1100px;
+    }
+    .theme-label {
+      font-weight: 600;
+      color: var(--muted);
+      margin-right: 8px;
+    }
+    .theme-switch {
+      width: 44px;
+      height: 24px;
+      appearance: none;
+      background: #334155;
+      border-radius: 12px;
+      position: relative;
+      outline: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .theme-switch:checked {
+      background: #ff7a59;
+    }
+    .theme-switch + .slider {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 44px;
+      height: 24px;
+      pointer-events: none;
+    }
+    .theme-switch:before {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 4px;
+      width: 16px;
+      height: 16px;
+      background: #fff;
+      border-radius: 50%;
+      transition: left 0.3s;
+    }
+    .theme-switch:checked:before {
+      left: 24px;
+      background: #334155;
+    }
+    body.light {
+      background: #f8fafc;
+      color: #222;
+    }
+    body.light header, body.light section, body.light .project-card, body.light .skills-grid, body.light .skill {
+      background: #fff !important;
+      color: #222 !important;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    }
+    body.light h1, body.light h2, body.light h3, body.light h4 {
+      color: #ff7a59 !important;
+    }
+    body.light .btn {
+      background: #ff7a59;
+      color: #fff;
+    }
+    body.light .project-card p, body.light .skill {
+      color: #334155 !important;
+    }
+    body.light footer {
+      background: #fff;
+      color: #334155;
+    }
+    .theme-switch-wrap.global-switch {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      background: transparent;
+      z-index: 100;
+      padding: 18px 0 0 0;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+    <div class="theme-switch-wrap global-switch">
+      <label class="theme-label">Light Mode</label>
+      <input type="checkbox" id="theme-switch" class="theme-switch">
+      <span class="slider"></span>
+    </div>
+  <header>
+    <h1>Mohammed Dino</h1>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2>Hello, I'm Mohammed Dino</h2>
+    <p>Currently a beginner top student aiming to become a software engineer</p>
+    <button class="btn">Contact Me</button>
+  </section>
+
+  <section id="about" class="about">
+    <h3>About Me</h3>
+    <p>Hello! I'm Mohammed Dino, a dedicated beginner learning software engineering. I am passionate about building real-world applications and improving my coding skills every day. I aim to become a professional software engineer and contribute to impactful projects in the future.</p>
+  </section>
+
+  <section id="skills" class="skills">
+    <h3>Skills</h3>
+    <div class="skills-grid">
+      <div class="skill">HTML</div>
+      <div class="skill">CSS</div>
+      <div class="skill">Learning JavaScript</div>
+      <div class="skill">Problem Solving</div>
+    </div>
+  </section>
+
+  <section id="projects" class="projects">
+    <h3>Projects</h3>
+    <div class="projects-grid">
+      <div class="project-card">
+        <h4>Rock Paper Scissors Game</h4>
+        <p>Challenge a friend to a fast-paced Rock Paper Scissors game with a 5-second countdown for each player!</p>
+        <a href="rps-game.html" class="btn" style="margin-top:10px;display:inline-block;">Play Now</a>
+      </div>
+      <div class="project-card">
+        <h4>Mohammed Dino Etch-a-Sketch</h4>
+        <p>Draw on a customizable grid with color modes and clear/reset options. Try my Etch-a-Sketch game!</p>
+        <a href="etch-a-sketch.html" class="btn" style="margin-top:10px;display:inline-block;">Play Now</a>
+      </div>
+      <div class="project-card">
+        <h4>Mohammed Dino Calculator</h4>
+        <p>Simple and modern calculator app for basic math operations. Try it out!</p>
+        <a href="calculator.html" class="btn" style="margin-top:10px;display:inline-block;">Open Calculator</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h3>Contact</h3>
+    <p>Email: <a href="mailto:your.email@example.com">your.email@example.com</a></p>
+    <p>GitHub: <a href="#">github.com/yourusername</a></p>
+    <p>LinkedIn: <a href="#">linkedin.com/in/yourprofile</a></p>
+  </section>
+
+  <footer>
+    © 2025 Mohammed Dino. All rights reserved.
+  </footer>
+
+  <script>
+    const themeSwitch = document.getElementById('theme-switch');
+    themeSwitch.addEventListener('change', function() {
+      document.body.classList.toggle('light');
+      document.body.classList.toggle('dark');
+    });
+    // Set initial theme
+    document.body.classList.add('dark');
+  </script>
+</body>
+</html>

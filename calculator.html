@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mohammed Dino Calculator</title>
+  <style>
+    :root {
+      --accent: #ff7a59;
+      --bg: #0f172a;
+      --card: rgba(255,255,255,0.04);
+      --muted: #6b7280;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: #e6eef8;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.4s, color 0.4s;
+    }
+    body.light {
+      background: #f8fafc;
+      color: #222;
+    }
+    .container {
+      background: var(--card);
+      padding: 32px 24px;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+      text-align: center;
+      min-width: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    body.light .container {
+      background: #fff;
+      color: #222;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    }
+    h2 {
+      color: var(--accent);
+      margin-bottom: 18px;
+    }
+    body.light h2 {
+      color: #ff7a59;
+    }
+    #display {
+      width: 100%;
+      font-size: 2rem;
+      background: #1e293b;
+      color: #ff7a59;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 18px;
+      text-align: right;
+    }
+    body.light #display {
+      background: #f1f5f9;
+      color: #334155;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 60px);
+      gap: 12px;
+      justify-content: center;
+    }
+    .btn {
+      padding: 16px;
+      font-size: 1.2rem;
+      background: var(--accent);
+      color: #081428;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: 0.2s;
+    }
+    body.light .btn {
+      background: #ff7a59;
+      color: #fff;
+    }
+    .btn:hover {
+      opacity: 0.85;
+    }
+    .btn.op {
+      background: #334155;
+      color: #ff7a59;
+    }
+    body.light .btn.op {
+      background: #e2e8f0;
+      color: #ff7a59;
+    }
+    .btn.eq {
+      background: #22d3ee;
+      color: #081428;
+    }
+    body.light .btn.eq {
+      background: #22d3ee;
+      color: #fff;
+    }
+    .btn.clear {
+      background: #f472b6;
+      color: #081428;
+    }
+    body.light .btn.clear {
+      background: #f472b6;
+      color: #fff;
+    }
+    .theme-switch-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 30px auto 10px auto;
+      max-width: 400px;
+    }
+    .theme-label {
+      font-weight: 600;
+      color: var(--muted);
+      margin-right: 8px;
+    }
+    .theme-switch {
+      width: 44px;
+      height: 24px;
+      appearance: none;
+      background: #334155;
+      border-radius: 12px;
+      position: relative;
+      outline: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .theme-switch:checked {
+      background: #ff7a59;
+    }
+    .theme-switch + .slider {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 44px;
+      height: 24px;
+      pointer-events: none;
+    }
+    .theme-switch:before {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 4px;
+      width: 16px;
+      height: 16px;
+      background: #fff;
+      border-radius: 50%;
+      transition: left 0.3s;
+    }
+    .theme-switch:checked:before {
+      left: 24px;
+      background: #334155;
+    }
+    body {
+      transition: background 0.4s, color 0.4s;
+    }
+    .center {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+    .theme-switch-wrap.global-switch {
+      position: fixed;
+      top: 18px;
+      right: 32px;
+      width: auto;
+      height: 56px;
+      background: transparent;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  </style>
+</head>
+<body class="dark">
+    <div class="theme-switch-wrap global-switch" style="position:fixed;top:18px;right:32px;width:auto;height:56px;background:transparent;z-index:100;display:flex;align-items:center;justify-content:flex-end;">
+      <label class="theme-label">Light Mode</label>
+      <input type="checkbox" id="theme-switch" class="theme-switch">
+      <span class="slider"></span>
+    </div>
+    <div class="container center">
+      <h2>Mohammed Dino Calculator</h2>
+      <input id="display" type="text" value="" readonly>
+      <div class="buttons">
+        <button class="btn" data-value="7">7</button>
+        <button class="btn" data-value="8">8</button>
+        <button class="btn" data-value="9">9</button>
+        <button class="btn op" data-value="/">÷</button>
+        <button class="btn" data-value="4">4</button>
+        <button class="btn" data-value="5">5</button>
+        <button class="btn" data-value="6">6</button>
+        <button class="btn op" data-value="*">×</button>
+        <button class="btn" data-value="1">1</button>
+        <button class="btn" data-value="2">2</button>
+        <button class="btn" data-value="3">3</button>
+        <button class="btn op" data-value="-">−</button>
+        <button class="btn" data-value="0">0</button>
+        <button class="btn" data-value=".">.</button>
+        <button class="btn clear" id="clear">C</button>
+        <button class="btn op" data-value="+">+</button>
+        <button class="btn eq" id="equals">=</button>
+      </div>
+    </div>
+    <script>
+      const display = document.getElementById('display');
+      const buttons = document.querySelectorAll('.btn[data-value]');
+      const clearBtn = document.getElementById('clear');
+      const equalsBtn = document.getElementById('equals');
+      const themeSwitch = document.getElementById('theme-switch');
+      let current = '';
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          current += btn.getAttribute('data-value');
+          display.value = current;
+        });
+      });
+
+      clearBtn.addEventListener('click', () => {
+        current = '';
+        display.value = '';
+      });
+
+      equalsBtn.addEventListener('click', () => {
+        try {
+          // Replace division and multiplication symbols for eval
+          let expr = current.replace(/÷/g, '/').replace(/×/g, '*').replace(/−/g, '-');
+          display.value = eval(expr);
+          current = display.value;
+        } catch {
+          display.value = 'Error';
+          current = '';
+        }
+      });
+
+      themeSwitch.addEventListener('change', function() {
+        document.body.classList.toggle('light');
+        document.body.classList.toggle('dark');
+      });
+      // Set initial theme
+      document.body.classList.add('dark');
+    </script>
+  </body>
+</html>

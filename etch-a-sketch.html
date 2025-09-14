@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mohammed Dino Etch-a-Sketch</title>
+  <style>
+    :root {
+      --accent: #ff7a59;
+      --bg: #0f172a;
+      --card: rgba(255,255,255,0.04);
+      --muted: #6b7280;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    body {
+      margin: 0;
+      background-color: var(--bg);
+      color: #e6eef8;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.4s, color 0.4s;
+    }
+    h2 {
+      margin-bottom: 10px;
+      color: var(--accent);
+    }
+    .container {
+      background: var(--card);
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+    #grid {
+      display: grid;
+      margin: 20px auto;
+      background: #1e293b;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .cell {
+      width: 24px;
+      height: 24px;
+      background: #334155;
+      border: 1px solid #475569;
+      transition: background 0.2s;
+      border-radius: 4px;
+    }
+    .cell.active {
+      background: var(--accent);
+    }
+    .controls {
+      margin-bottom: 18px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 10px 18px;
+      background: var(--accent);
+      color: #081428;
+      font-weight: 700;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      opacity: 0.85;
+    }
+    label {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-right: 8px;
+    }
+    input[type="range"] {
+      accent-color: var(--accent);
+    }
+    .center {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+    .theme-switch-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 30px auto 10px auto;
+      max-width: 600px;
+    }
+    .theme-label {
+      font-weight: 600;
+      color: var(--muted);
+      margin-right: 8px;
+    }
+    .theme-switch {
+      width: 44px;
+      height: 24px;
+      appearance: none;
+      background: #334155;
+      border-radius: 12px;
+      position: relative;
+      outline: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .theme-switch:checked {
+      background: #ff7a59;
+    }
+    .theme-switch + .slider {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 44px;
+      height: 24px;
+      pointer-events: none;
+    }
+    .theme-switch:before {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 4px;
+      width: 16px;
+      height: 16px;
+      background: #fff;
+      border-radius: 50%;
+      transition: left 0.3s;
+    }
+    .theme-switch:checked:before {
+      left: 24px;
+      background: #334155;
+    }
+    body.light {
+      background: #f8fafc;
+      color: #222;
+    }
+    body.light .container {
+      background: #fff;
+      color: #222;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    }
+    body.light h2 {
+      color: #ff7a59;
+    }
+    body.light .btn {
+      background: #ff7a59;
+      color: #fff;
+    }
+    body.light .controls label {
+      color: #334155;
+    }
+    body.light #grid {
+      background: #f1f5f9;
+    }
+    body.light .cell {
+      background: #e2e8f0;
+      border-color: #cbd5e1;
+    }
+    body.light .cell.active {
+      background: #ff7a59;
+    }
+    .theme-switch-wrap.global-switch {
+      position: fixed;
+      top: 18px;
+      right: 32px;
+      width: auto;
+      height: 56px;
+      background: transparent;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin: 0;
+      padding: 0;
+      box-shadow: none;
+      max-width: none;
+    }
+    .container.center {
+      position: static;
+      top: unset;
+      right: unset;
+      margin: 0 auto;
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body class="dark">
+    <div class="theme-switch-wrap global-switch">
+      <label class="theme-label">Light Mode</label>
+      <input type="checkbox" id="theme-switch" class="theme-switch">
+      <span class="slider"></span>
+    </div>
+    <div class="container center">
+      <h2>Mohammed Dino Etch-a-Sketch</h2>
+      <div class="controls">
+        <label for="size">Grid Size:</label>
+        <input type="range" id="size" min="8" max="64" value="16">
+        <span id="size-value">16 x 16</span>
+        <button class="btn" id="clear">Clear</button>
+        <button class="btn" id="eraser">Eraser</button>
+        <div style="position:relative;display:inline-block;">
+          <button class="btn" id="color-toggle">Color</button>
+          <div id="color-panel" style="display:none;position:absolute;top:110%;left:0;z-index:10;background:var(--card);padding:10px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.15);">
+            <button class="btn color-btn" data-color="#ff7a59" style="background:#ff7a59;color:#fff;margin:2px;">Orange</button>
+            <button class="btn color-btn" data-color="#22d3ee" style="background:#22d3ee;color:#081428;margin:2px;">Cyan</button>
+            <button class="btn color-btn" data-color="#a3e635" style="background:#a3e635;color:#081428;margin:2px;">Lime</button>
+            <button class="btn color-btn" data-color="#f472b6" style="background:#f472b6;color:#081428;margin:2px;">Pink</button>
+            <button class="btn color-btn" data-color="#facc15" style="background:#facc15;color:#081428;margin:2px;">Yellow</button>
+          </div>
+        </div>
+        <button class="btn" id="random">Random Color</button>
+        <button class="btn" id="black">Black</button>
+      </div>
+      <div id="grid"></div>
+    </div>
+    <script>
+      const grid = document.getElementById('grid');
+      const sizeSlider = document.getElementById('size');
+      const sizeValue = document.getElementById('size-value');
+      const clearBtn = document.getElementById('clear');
+      const randomBtn = document.getElementById('random');
+      const blackBtn = document.getElementById('black');
+      const eraserBtn = document.getElementById('eraser');
+      const colorToggle = document.getElementById('color-toggle');
+      const colorPanel = document.getElementById('color-panel');
+      const themeSwitch = document.getElementById('theme-switch');
+      let colorBtns;
+      let gridSize = 16;
+      let colorMode = 'black';
+      let customColor = '#ff7a59';
+
+      function setGrid(size) {
+        grid.innerHTML = '';
+        grid.style.gridTemplateColumns = `repeat(${size}, 24px)`;
+        grid.style.gridTemplateRows = `repeat(${size}, 24px)`;
+        for (let i = 0; i < size * size; i++) {
+          const cell = document.createElement('div');
+          cell.classList.add('cell');
+          cell.addEventListener('mouseover', () => {
+            if (colorMode === 'black') {
+              cell.classList.add('active');
+              cell.style.background = '#ff7a59';
+            } else if (colorMode === 'random') {
+              cell.classList.add('active');
+              cell.style.background = `hsl(${Math.random()*360}, 80%, 60%)`;
+            } else if (colorMode === 'eraser') {
+              cell.classList.remove('active');
+              cell.style.background = '#334155';
+            } else if (colorMode === 'custom') {
+              cell.classList.add('active');
+              cell.style.background = customColor;
+            }
+          });
+          grid.appendChild(cell);
+        }
+      }
+
+      sizeSlider.addEventListener('input', e => {
+        gridSize = +e.target.value;
+        sizeValue.textContent = `${gridSize} x ${gridSize}`;
+        setGrid(gridSize);
+      });
+
+      clearBtn.addEventListener('click', () => {
+        setGrid(gridSize);
+      });
+
+      randomBtn.addEventListener('click', () => {
+        colorMode = 'random';
+      });
+
+      blackBtn.addEventListener('click', () => {
+        colorMode = 'black';
+      });
+
+      eraserBtn.addEventListener('click', () => {
+        colorMode = 'eraser';
+      });
+
+      colorToggle.addEventListener('click', () => {
+        colorPanel.style.display = colorPanel.style.display === 'none' ? 'block' : 'none';
+        // update colorBtns after panel is shown
+        colorBtns = colorPanel.querySelectorAll('.color-btn');
+        colorBtns.forEach(btn => {
+          btn.onclick = () => {
+            colorMode = 'custom';
+            customColor = btn.getAttribute('data-color');
+            colorPanel.style.display = 'none';
+          };
+        });
+      });
+
+      themeSwitch.addEventListener('change', function() {
+        document.body.classList.toggle('light');
+        document.body.classList.toggle('dark');
+      });
+      // Set initial theme
+      document.body.classList.add('dark');
+
+      // Initial grid
+      setGrid(gridSize);
+      // Hide color panel if clicking outside
+      document.addEventListener('click', (e) => {
+        if (!colorPanel.contains(e.target) && e.target !== colorToggle) {
+          colorPanel.style.display = 'none';
+        }
+      });
+    </script>
+  </body>
+</html>
